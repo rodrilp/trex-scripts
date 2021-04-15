@@ -12,7 +12,7 @@ try:
     pkts = [base_pkt['UDP'].dport = p for p in range(1024, 1124)]
 
     # inject the packets
-    c.push_packets(pkts, ports = [port_0])
+    c.push_packets(pkts, ports = [0])
 
     # hold until traffic ends
     c.wait_on_traffic()
