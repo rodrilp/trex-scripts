@@ -1,40 +1,44 @@
 # get TRex APIs
 from trex_stl_lib.api import *
 
-# create client
-c = STLClient(server = '127.0.0.1')
-passed = True
+def simple():
 
-try:
-    # connect to server
-    c.connect()
+    # create client
+    c = STLClient(server = '127.0.0.1')
+    passed = True
 
-    my_ports=[0,1]
+    try:
+        # connect to server
+        c.connect()
 
-    # prepare our ports
-    c.reset(ports = my_ports)
+        my_ports=[0,1]
 
-    profile_file =   "/trex/v2.88/stl/udp_1pkt_simple.py"   # a traffic profile file
+        # prepare our ports
+        c.reset(ports = my_ports)
 
-    try:                                                    # load a profile
-        profile = STLProfile.load(profile_file)
-    except STLError as e:
-        print (format_text("\nError while loading profile '{0}'\n".format(profile_file), 'bold'))
-        print (e.brief() + "\n")
-        return
+        profile_file =   "/trex/v2.88/stl/udp_1pkt_simple.py"   # a traffic profile file
 
-    print (profile.dump_to_yaml())                            # print it as YAML
-    print (profile.to_json())
+        try:                                                    # load a profile
+            profile = STLProfile.load(profile_file)
+        except STLError as e:
+            print (format_text("\nError while loading profile '{0}'\n".format(profile_file), 'bold'))
+            print (e.brief() + "\n")
+            return
 
-    c.remove_all_streams(my_ports)                          # remove all streams
+        print (profile.dump_to_yaml())                            # print it as YAML
+        print (profile.to_json())
 
-    c.add_streams(profile.get_streams(), ports = my_ports)  # add them
+        c.remove_all_streams(my_ports)                          # remove all streams
 
-    c.start(ports = [0, 1], mult = "5mpps", duration = 10)  # start for 10 sec
+        c.add_streams(profile.get_streams(), ports = my_ports)  # add them
 
-    # block until done
-    c.wait_on_traffic(ports = [0, 1])                       # wait
+        c.start(ports = [0, 1], mult = "5mpps", duration = 10)  # start for 10 sec
+
+        # block until done
+        c.wait_on_traffic(ports = [0, 1])                       # wait
 
 
-finally:
-    c.disconnect()
+    finally:
+        c.disconnect()
+
+simple()
