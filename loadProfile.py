@@ -25,7 +25,6 @@ def simple():
             print (e.brief() + "\n")
             return
 
-        print (profile.dump_to_yaml())                            # print it as YAML
         print (profile.to_json())
 
         c.remove_all_streams(my_ports)                          # remove all streams
