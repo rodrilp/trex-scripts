@@ -6,21 +6,23 @@ base_pkt1 =  Ether()/IP(src="16.0.0.2",dst="48.0.0.1")/UDP(dport=12,sport=1025)
 base_pkt2 =  Ether()/IP(src="16.0.0.3",dst="48.0.0.1")/UDP(dport=12,sport=1025)
 pad = max(0, 300 - len(base_pkt)) * 'x'
 
-s1 = STLProfile( [ STLStream( isg = 1.0, # star in delay in usec
-                                packet = STLPktBuilder(pkt = base_pkt/pad),
-                                mode = STLTXCont( pps = 10),
+s1 = STLProfile( [ STLStream(   name = 's0',
+                                isg = 1.0, # star in delay in usec
+                                packet  = STLPktBuilder(pkt = base_pkt/pad),
+                                mode    = STLTXCont( pps = 10),
                                 ),
 
-                        STLStream( isg = 2.0,
-                                packet  = STLPktBuilder(pkt = base_pkt1/pad),
-                                mode    = STLTXCont( pps = 20),
-                                ),
+                        STLStream(  name = 's1',
+                                    isg = 2.0,
+                                    packet  = STLPktBuilder(pkt = base_pkt1/pad),
+                                    mode    = STLTXCont( pps = 20),
+                                    ),
 
-                        STLStream(  isg = 3.0,
-                                    packet = STLPktBuilder(pkt = base_pkt2/pad),
+                        STLStream(  name = 's2',
+                                    isg = 3.0,  
+                                    packet  = STLPktBuilder(pkt = base_pkt2/pad),
                                     mode    = STLTXCont( pps = 30)
-
-                                )
+                                    )
                     ]).get_streams()
 
 c = STLClient(server = '127.0.0.1')
@@ -38,7 +40,7 @@ try:
     # clear the stats before injecting
     c.clear_stats()
 
-    c.start(ports = [0, 1], mult = "5kpps", duration = 10)
+    c.start(ports = [0], mult = "5kpps", duration = 10)
 
     # block until done
     c.wait_on_traffic(ports = [0, 1])
