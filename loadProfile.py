@@ -19,12 +19,12 @@ try:
     try:                                                    # load a profile
         profile = STLProfile.load(profile_file)
     except STLError as e:
-        print format_text("\nError while loading profile '{0}'\n".format(profile_file), 'bold')
-        print e.brief() + "\n"
+        print (format_text("\nError while loading profile '{0}'\n".format(profile_file), 'bold'))
+        print (e.brief() + "\n")
         return
 
-    print profile.dump_to_yaml()                            # print it as YAML
-    print profile.to_json()
+    print (profile.dump_to_yaml())                            # print it as YAML
+    print (profile.to_json())
 
     c.remove_all_streams(my_ports)                          # remove all streams
 
