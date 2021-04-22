@@ -8,7 +8,7 @@ try:
     c.reset(ports = [0, 1])
 
     # push local PCAP file 'http.pcap' over port_0 with IPG of 1 ms
-    c.push_pcap('http.pcap', ports = 0, ipg_usec = 1000)
+    c.push_pcap('https.pcap', ports = 0, ipg_usec = 1000)
 
     # hold until traffic ends
     c.wait_on_traffic()
